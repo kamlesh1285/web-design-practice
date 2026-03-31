@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    export default function App() {
+  const [resume, setResume] = React.useState(null);
+  const [analysis, setAnalysis] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+
+  const handleUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setResume(file.name);
+      setAnalysis(null);
+    }
+  };
+
+  const analyzeResume = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setAnalysis({
+        ats: 86,
+        missingSkills: ['System Design', 'Docker', 'AWS'],
+        suggestions: [
+          'Add measurable achievements in your projects',
+          'Mention internship experience clearly',
+          'Include deployment links and GitHub repositories',
+        ],
+        jobs: ['Frontend Developer Intern', 'Full Stack Developer', 'Software Engineer Trainee'],
+      });
+      setLoading(false);
+    }, 1800);
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-100 p-8">
+      <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl p-8">
+        <h1 className="text-3xl font-bold text-center mb-6">AI Resume Analyzer + Job Match</h1>
+
+        <input
+          type="file"
+          accept=".pdf,.doc,.docx"
+          onChange={handleUpload}
+          className="w-full border p-3 rounded-2xl mb-4"
+        />
+
+        {resume && (
+          <p className="mb-4 text-gray-600">Uploaded Resume: <span className="font-semibold">{resume}</span></p>
+        )}
+
+        <button
+          onClick={analyzeResume}
+          className="w-full bg-black text-white py-3 rounded-2xl font-semibold"
+        >
+          {loading ? 'Analyzing Resume...' : 'Analyze Resume'}
+        </button>
+
+        {analysis && (
+          <div className="mt-8 space-y-6">
+            <div className="p-4 border rounded-2xl">
+              <h2 className="text-xl font-semibold">ATS Score</h2>
+              <p className="text-4xl font-bold mt-2">{analysis.ats}%</p>
+            </div>
+
+            <div className="p-4 border rounded-2xl">
+              <h2 className="text-xl font-semibold mb-2">Missing Skills</h2>
+              <ul className="list-disc pl-6">
+                {analysis.missingSkills.map((skill, i) => (
+                  <li key={i}>{skill}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="p-4 border rounded-2xl">
+              <h2 className="text-xl font-semibold mb-2">AI Suggestions</h2>
+              <ul className="list-disc pl-6">
+                {analysis.suggestions.map((tip, i) => (
+                  <li key={i}>{tip}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="p-4 border rounded-2xl">
+              <h2 className="text-xl font-semibold mb-2">Recommended Jobs</h2>
+              <ul className="list-disc pl-6">
+                {analysis.jobs.map((job, i) => (
+                  <li key={i}>{job}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+</body>
+</html>
