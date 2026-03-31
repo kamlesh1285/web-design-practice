@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    export default function App() {
+  const [video, setVideo] = React.useState(null);
+  const [clips, setClips] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+
+  const handleUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setVideo(URL.createObjectURL(file));
+      setClips([]);
+    }
+  };
+
+  const generateShorts = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setClips([
+        { id: 1, title: 'Highlight Clip 1', start: '00:00', end: '00:15', caption: 'Amazing intro moment 🔥' },
+        { id: 2, title: 'Highlight Clip 2', start: '00:16', end: '00:30', caption: 'Best engaging scene 🎬' },
+        { id: 3, title: 'Highlight Clip 3', start: '00:31', end: '00:45', caption: 'Perfect viral short 🚀' },
+      ]);
+      setLoading(false);
+    }, 2000);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 p-8">
+      <div className="max-w-5xl mx-auto bg-white rounded-3xl shadow-xl p-8">
+        <h1 className="text-3xl font-bold mb-6 text-center">AI Video Shorts Generator</h1>
+
+        <div className="mb-6">
+          <input
+            type="file"
+            accept="video/*"
+            onChange={handleUpload}
+            className="block w-full border p-3 rounded-xl"
+          />
+        </div>
+
+        {video && (
+          <div className="mb-6">
+            <video controls className="w-full rounded-2xl shadow-md">
+              <source src={video} type="video/mp4" />
+            </video>
+          </div>
+        )}
+
+        <button
+          onClick={generateShorts}
+          className="w-full bg-black text-white py-3 rounded-2xl text-lg font-semibold hover:opacity-90"
+        >
+          {loading ? 'Generating AI Shorts...' : 'Generate Shorts'}
+        </button>
+
+        {clips.length > 0 && (
+          <div className="mt-8 grid gap-4">
+            {clips.map((clip) => (
+              <div key={clip.id} className="border rounded-2xl p-4 shadow-sm">
+                <h2 className="text-xl font-semibold">{clip.title}</h2>
+                <p className="text-gray-600">Duration: {clip.start} - {clip.end}</p>
+                <p className="mt-2">Caption: {clip.caption}</p>
+                <button className="mt-3 px-4 py-2 bg-gray-900 text-white rounded-xl">
+                  Export Short
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+</body>
+</html>
